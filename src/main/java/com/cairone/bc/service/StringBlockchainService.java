@@ -7,8 +7,8 @@ import com.cairone.bc.domain.StringBlockchain;
 
 public class StringBlockchainService extends AbstractBlockchainService<String> {
 
-    public StringBlockchainService(StringBlockchain blockchain) {
-        super(blockchain);
+    public StringBlockchainService(StringBlockchain blockchain, int miningDifficulty) {
+        super(blockchain, miningDifficulty);
     }
 
     @Override
@@ -24,6 +24,9 @@ public class StringBlockchainService extends AbstractBlockchainService<String> {
             .payload(payload)
             .build();
 
+        String id = calculateHash(block);
+        block.setId(id);
+        
         addBlock(block);
         
         return block;

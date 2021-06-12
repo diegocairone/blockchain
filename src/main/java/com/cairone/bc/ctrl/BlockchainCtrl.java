@@ -22,6 +22,12 @@ public class BlockchainCtrl {
         return ResponseEntity.ok(blockchainService.getBlocks());
     }
 
+    @GetMapping("/api/blockchain/verify")
+    public ResponseEntity<?> verifyBlockchain() {
+        boolean isValid = blockchainService.validateBlockchain();
+        return ResponseEntity.ok(isValid);
+    }
+
     @PostMapping("/api/blockchain")
     public ResponseEntity<StringBlock> newBlock(String data) {
         
