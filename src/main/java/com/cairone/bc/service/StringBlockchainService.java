@@ -12,14 +12,9 @@ public class StringBlockchainService extends AbstractBlockchainService<String> {
     }
 
     @Override
-    public StringBlockchain getChain() {
-        return (StringBlockchain) super.getChain();
-    }
-
-    @Override
     public StringBlock newBlock(String data) {
         
-        Block<String> prevBlock = blockchain.lastBlock();
+        Block<String> prevBlock = lastBlock();
         
         Payload<String> payload = new Payload<>(data);
         String prevId = prevBlock == null ? "0" : prevBlock.getId();
@@ -28,8 +23,10 @@ public class StringBlockchainService extends AbstractBlockchainService<String> {
             .prevId(prevId)
             .payload(payload)
             .build();
+
+        addBlock(block);
         
         return block;
     }
-    
+
 }

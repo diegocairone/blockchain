@@ -1,7 +1,9 @@
 package com.cairone.bc.ctrl;
 
+import java.util.List;
+
+import com.cairone.bc.domain.Block;
 import com.cairone.bc.domain.StringBlock;
-import com.cairone.bc.domain.StringBlockchain;
 import com.cairone.bc.service.StringBlockchainService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,8 @@ public class BlockchainCtrl {
     @Autowired private StringBlockchainService blockchainService;
 
     @GetMapping("/api/blockchain")
-    public ResponseEntity<StringBlockchain> getBlockchain() {
-        return ResponseEntity.ok(blockchainService.getChain());
+    public ResponseEntity<List<Block<String>>> getBlockchain() {
+        return ResponseEntity.ok(blockchainService.getBlocks());
     }
 
     @PostMapping("/api/blockchain")
