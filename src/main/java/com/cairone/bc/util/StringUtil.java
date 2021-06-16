@@ -12,4 +12,27 @@ public class StringUtil {
 	public static String getDificultyString(int difficulty) {
 		return new String(new char[difficulty]).replace('\0', '0');
 	}
+
+    public static String toHexString(byte[] data) {
+
+        StringBuffer hexString = new StringBuffer(); // hash as hexidecimal
+
+        for (int i = 0; i < data.length; i++) {
+            String hex = Integer.toHexString(0xff & data[i]);
+            if(hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
+    public static byte[] toBytesArray(String data) {
+        
+        byte[] val = new byte[data.length() / 2];
+        for (int i = 0; i < val.length; i++) {
+            int index = i * 2;
+            int j = Integer.parseInt(data.substring(index, index + 2), 16);
+            val[i] = (byte) j;
+        }
+        return val;
+    }
 }
