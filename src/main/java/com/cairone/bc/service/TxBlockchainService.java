@@ -1,5 +1,6 @@
 package com.cairone.bc.service;
 
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,9 @@ import com.cairone.bc.domain.Payload;
 import com.cairone.bc.domain.Tx;
 import com.cairone.bc.domain.TxBlock;
 import com.cairone.bc.domain.TxBlockchain;
+import com.cairone.bc.util.CryptoUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 public class TxBlockchainService extends AbstractBlockchainService<List<Tx>> {
     
     private TxBlock currentBlock = null;
+
+    @Autowired
+    private KeyStoreService keyStoreService;
 
     @Value("${app.block-size:5}")
     private int blockSize;
@@ -33,7 +39,28 @@ public class TxBlockchainService extends AbstractBlockchainService<List<Tx>> {
         }
 
         List<Tx> transactions = currentBlock.getPayload().getData();
-        transactions.add(transaction);
+        
+        String senderPubKey = CryptoUtil.encodeToString(transaction.getSender());
+        KeyPair senderKP = keyStoreService.findByPubKey(senderPubKey)
+            .orElseThrow(() -> new RuntimeException(
+                "No se reconoce la clave publica: " + senderPubKey));
+
+        String from = CryptoUtil.encodeToString(transaction.getSender());
+        String to = CryptoUtil.encodeToString(transaction.getRecipient());
+        String sent = transaction.getAmount().toString();
+        String data = String.format("%s:%s:%s", from, to, sent);
+
+        boolean isValid = CryptoUtil.verifyECDSASig(
+            senderKP.getPublic(), 
+            data, 
+            transaction.getSignature());
+
+        if (isValid) {
+            log.info("Transaction ID {} is valid!", transaction.getId());
+            transactions.add(transaction);
+        } else {
+            throw new RuntimeException("Invalid transaction with ID " + transaction.getId());
+        }
 
         if (transactions.size() == blockSize) {
             log.info(
