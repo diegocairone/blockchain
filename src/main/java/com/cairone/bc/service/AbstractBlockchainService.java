@@ -73,7 +73,7 @@ public abstract class AbstractBlockchainService<T> {
     }
 
     protected String calculateHash(Block<T> block) {
-        String data = String.format("%s:%s%s:%s", 
+        String data = String.format("%s:%s:%s:%s", 
             block.getPrevId(),
             Long.toString(block.getCreatedAt()),
             Integer.toString(block.getNonce()),

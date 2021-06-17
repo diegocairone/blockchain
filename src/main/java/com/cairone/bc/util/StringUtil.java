@@ -15,6 +15,10 @@ public class StringUtil {
 
     public static String toHexString(byte[] data) {
 
+        if (data == null) {
+            return null;
+        }
+
         StringBuffer hexString = new StringBuffer(); // hash as hexidecimal
 
         for (int i = 0; i < data.length; i++) {

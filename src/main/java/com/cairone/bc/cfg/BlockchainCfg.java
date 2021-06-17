@@ -1,7 +1,7 @@
 package com.cairone.bc.cfg;
 
-import com.cairone.bc.domain.StringBlockchain;
-import com.cairone.bc.service.StringBlockchainService;
+import com.cairone.bc.domain.TxBlockchain;
+import com.cairone.bc.service.TxBlockchainService;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,13 +14,13 @@ public class BlockchainCfg {
     private int miningDifficulty;
 
     @Bean
-    public StringBlockchain getBlockchain() {
-        StringBlockchain blockchain = new StringBlockchain();
+    public TxBlockchain getBlockchain() {
+        TxBlockchain blockchain = new TxBlockchain();
         return blockchain;
     }
 
     @Bean
-    public StringBlockchainService getBlockchainService() {
-        return new StringBlockchainService(getBlockchain(), miningDifficulty);
+    public TxBlockchainService getBlockchainService() {
+        return new TxBlockchainService(getBlockchain(), miningDifficulty);
     }
 }

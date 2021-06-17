@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import java.security.spec.ECGenParameterSpec;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.cairone.bc.util.CryptoUtil;
@@ -17,6 +18,10 @@ public class KeyStoreService {
 
     public KeyStoreService() {
         this.keys = new HashMap<>();
+    }
+
+    public Optional<KeyPair> findByPubKey(String pubKey) {
+        return Optional.ofNullable(keys.get(pubKey));
     }
 
     public Set<String> listKeys() {
